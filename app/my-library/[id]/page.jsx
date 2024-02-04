@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { FaCheckSquare, FaClock, FaPlay, FaTrashAlt } from 'react-icons/fa';
 import { MdGamepad } from 'react-icons/md';
 
 const GameDetails = ({ params }) => {
@@ -43,7 +44,6 @@ const GameDetails = ({ params }) => {
   };
 
   const handleAddHours = (id) => {
-    console.log(id);
     setToggleDropdown(false);
   };
 
@@ -84,17 +84,23 @@ const GameDetails = ({ params }) => {
 
                 {toggleDropdown && (
                   <div className="dropdown">
-                    <div className="dropdown_link" onClick={() => handleAddHours(game.id)}>
-                      Add Hours
+                    <div className="dropdown_link flex items-center" onClick={() => handleAddHours(game.id)}>
+                      <FaClock className="mr-2" /> Add Hours
                     </div>
-                    <div className="dropdown_link" onClick={() => handleStatus('_isInProgress', game.id)}>
-                      {game._isInProgress ? 'Not Playing' : 'Play This Game Now!'}
+                    <div
+                      className="dropdown_link flex items-center"
+                      onClick={() => handleStatus('_isInProgress', game.id)}
+                    >
+                      <FaPlay className="mr-2" /> {game._isInProgress ? 'Not Playing' : 'Play This Game Now!'}
                     </div>
-                    <div className="dropdown_link" onClick={() => handleStatus('_isComplete', game.id)}>
-                      {game._isCompleted ? 'Not Beaten' : 'I Beat It!'}
+                    <div
+                      className="dropdown_link flex items-center"
+                      onClick={() => handleStatus('_isCompleted', game.id)}
+                    >
+                      <FaCheckSquare className="mr-2" /> {game._isCompleted ? 'Not Beaten' : 'I Beat It!'}
                     </div>
-                    <div className="dropdown_link" onClick={() => handleStatus('_isQuit', game.id)}>
-                      {game._isQuit ? 'UnQuit Game' : 'I Quit!'}
+                    <div className="dropdown_link flex items-center" onClick={() => handleStatus('_isQuit', game.id)}>
+                      <FaTrashAlt className="mr-2" /> {game._isQuit ? 'UnQuit Game' : 'I Quit!'}
                     </div>
                   </div>
                 )}
@@ -104,56 +110,56 @@ const GameDetails = ({ params }) => {
           <div className="flex mt-8">
             <div className="min-w-[200px] pt-2 px-4 hidden md:block">
               <div
-                className="w-full text-center p-2 bg-blue-600 text-white mb-4 rounded-sm cursor-pointer"
+                className="flex w-full justify-center items-center p-2 bg-blue-600 text-white mb-4 rounded-sm cursor-pointer"
                 onClick={() => handleAddHours(game.id)}
               >
-                Add Hours
+                <FaClock className="mr-2" /> Add Hours
               </div>
               <div
-                className="w-full text-center p-2 bg-blue-600 text-white mb-4 rounded-sm cursor-pointer"
+                className="flex w-full justify-center items-center p-2 bg-blue-600 text-white mb-4 rounded-sm cursor-pointer"
                 onClick={() => handleStatus('_isInProgress', game.id)}
               >
-                {game._isInProgress ? 'Not Playing' : 'Play This Game Now!'}
+                <FaPlay className="mr-2" /> {game._isInProgress ? 'Stop Playing' : 'Start Playing!'}
               </div>
               <div
-                className="w-full text-center p-2 bg-blue-600 text-white mb-4 rounded-sm cursor-pointer"
+                className="flex w-full justify-center items-center p-2 bg-blue-600 text-white mb-4 rounded-sm cursor-pointer"
                 onClick={() => handleStatus('_isCompleted', game.id)}
               >
-                {game._isCompleted ? 'Not Beaten' : 'I Beat It!'}
+                <FaCheckSquare className="mr-2" /> {game._isCompleted ? 'Not Beaten' : 'I Beat It!'}
               </div>
               <div
-                className="w-full text-center p-2 bg-blue-600 text-white mb-4 rounded-sm cursor-pointer"
+                className="flex w-full justify-center items-center p-2 bg-blue-600 text-white mb-4 rounded-sm cursor-pointer"
                 onClick={() => handleStatus('_isQuit', game.id)}
               >
-                {game._isQuit ? 'UnQuit Game' : 'I Quit!'}
+                <FaTrashAlt className="mr-2" /> {game._isQuit ? 'UnQuit Game' : 'I Quit!'}
               </div>
             </div>
             <div className="px-4">{game.summary}</div>
           </div>
           <div className="w-full py-8 px-4 md:hidden">
             <div
-              className="w-full text-center p-2 bg-blue-600 text-white mb-4 rounded-md cursor-pointer"
+              className="flex w-full justify-center items-center p-2 bg-blue-600 text-white mb-4 rounded-md cursor-pointer hover:brightness-110"
               onClick={() => handleAddHours(game.id)}
             >
-              Add Hours
+              <FaClock className="mr-2" /> Add Hours
             </div>
             <div
-              className="w-full text-center p-2 bg-blue-600 text-white mb-4 rounded-md cursor-pointer"
+              className="flex w-full justify-center items-center p-2 bg-blue-600 text-white mb-4 rounded-md cursor-pointer hover:brightness-110"
               onClick={() => handleStatus('_isInProgress', game.id)}
             >
-              {game._isInProgress ? 'Not Playing' : 'Play This Game Now!'}
+              <FaPlay className="mr-2" /> {game._isInProgress ? 'Stop Playing' : 'Start Playing!'}
             </div>
             <div
-              className="w-full text-center p-2 bg-blue-600 text-white mb-4 rounded-md cursor-pointer"
+              className="flex w-full justify-center items-center p-2 bg-blue-600 text-white mb-4 rounded-md cursor-pointer hover:brightness-110"
               onClick={() => handleStatus('_isCompleted', game.id)}
             >
-              {game._isCompleted ? 'Not Beaten' : 'I Beat It!'}
+              <FaCheckSquare className="mr-2" /> {game._isCompleted ? 'Not Beaten' : 'I Beat It!'}
             </div>
             <div
-              className="w-full text-center p-2 bg-blue-600 text-white mb-4 rounded-md cursor-pointer"
+              className="flex w-full justify-center items-center p-2 bg-blue-600 text-white mb-4 rounded-md cursor-pointer hover:brightness-110"
               onClick={() => handleStatus('_isQuit', game.id)}
             >
-              {game._isQuit ? 'UnQuit Game' : 'I Quit!'}
+              <FaTrashAlt className="mr-4 text-sm" /> {game._isQuit ? 'UnQuit Game' : 'I Quit!'}
             </div>
           </div>
         </>

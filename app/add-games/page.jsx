@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Game from '@components/Game';
+import Spinner from '@components/Spinner';
 
 const AddGames = () => {
   const { data: session } = useSession();
@@ -78,11 +79,12 @@ const AddGames = () => {
       </div>
 
       <div className="flex flex-wrap justify-between py-8">
-        {isLoading && <div>Loading...</div>}
         {games.map((game, i) => (
           <Game key={game.id} index={i} handleAddGame={handleAddGame} game={game} canAddToLibrary={true} />
         ))}
       </div>
+
+      {isLoading && <Spinner size={40} message={'Loading Games'} />}
     </section>
   );
 };

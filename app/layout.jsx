@@ -1,7 +1,7 @@
 import '@styles/globals.css';
 
-import Nav from '@components/Nav';
 import Provider from '@components/Provider';
+import MainLayout from './main-layout';
 
 export const metadata = {
   title: 'Just Beat It',
@@ -16,9 +16,8 @@ const RootLayout = ({ children }) => (
           <div className="gradient" />
         </div>
 
-        <main className="app text-slate-500">
-          <Nav />
-          {children}
+        <main className="app relative w-full text-slate-500">
+          <MainLayout>{children}</MainLayout>
         </main>
       </Provider>
     </body>

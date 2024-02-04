@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import Game from '@components/Game';
 import { FaPlus, FaSortAmountDownAlt } from 'react-icons/fa';
 import Link from 'next/link';
+import Spinner from '@components/Spinner';
 
 const MyLibrary = () => {
   const { data: session } = useSession();
@@ -45,7 +46,6 @@ const MyLibrary = () => {
       setIsSubmitting(false);
     }
   };
-  // console.log(library);
 
   return (
     <section className="w-full">
@@ -105,19 +105,15 @@ const MyLibrary = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap w-full justify-between py-8">
-        {isLoading && <div>Loading...</div>}
+      <div className="flex flex-wrap w-full justify-start py-8">
         {library.map((game, i) => (
           <Link href={`/my-library/${game._id}`} key={game.id}>
             <Game index={i} handleAddGame={handleAddGame} game={game} canAddToLibrary={false} />
           </Link>
         ))}
-        {/* {!isLoading && games?.length === 0 && (
-          <div className="w-full">
-            <p className="text-center">Add some games to your library!</p>
-          </div>
-        )} */}
       </div>
+
+      {isLoading && <Spinner size={40} message={'Loading library'} />}
     </section>
   );
 };

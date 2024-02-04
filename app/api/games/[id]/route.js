@@ -23,7 +23,6 @@ export const PATCH = async (request, { params }) => {
     await connectToDB();
     const game = await Game.findOne({ user: userId, id: gameId });
     const currentStatus = game[status];
-    console.log(currentStatus);
 
     const updatedGame = await Game.findByIdAndUpdate(game._id, {
       [status]: !currentStatus,
