@@ -24,9 +24,6 @@ export const POST = async (request) => {
 export const PATCH = async (request) => {
   const { gameId, hoursObj } = await request.json();
 
-  console.log('ID: ', gameId);
-  console.log('HOURS: ', hoursObj);
-
   try {
     await connectToDB();
 
@@ -44,11 +41,8 @@ export const PATCH = async (request) => {
 
     return new Response(JSON.stringify(updatedGame), { status: 200 });
   } catch {
-    return new Response(
-      'Something went wrong. Failed to add completion hours.',
-      {
-        status: 500,
-      }
-    );
+    return new Response('Something went wrong. Failed to add completion hours.', {
+      status: 500,
+    });
   }
 };

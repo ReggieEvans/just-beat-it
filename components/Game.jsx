@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import { FaCirclePlus } from 'react-icons/fa6';
+import BtnSpinner from './BtnSpinner';
 
-const Game = ({ game, handleAddGame, index, canAddToLibrary }) => {
+const Game = ({ game, handleAddGame, index, submitting, canSubmit }) => {
   let cover = game.cover?.url.replace('t_thumb', 't_cover_big');
 
   const getRatingStyle = (rating) => {
@@ -41,10 +42,16 @@ const Game = ({ game, handleAddGame, index, canAddToLibrary }) => {
             <p>{(game.total_rating / 10).toFixed(1)}</p>
           </div>
         </div>
-        {canAddToLibrary && (
-          <button className="px-2 mt-1" onClick={() => handleAddGame(game)}>
-            <FaCirclePlus className="text-xl text-blue-600" />
-          </button>
+        {canSubmit && (
+          <div>
+            {submitting?.isSubmitting && submitting?.index === index ? (
+              <BtnSpinner size={16} />
+            ) : (
+              <button className="px-2 mt-1" onClick={() => handleAddGame(game, index)}>
+                <FaCirclePlus className="text-xl text-blue-600" />
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>

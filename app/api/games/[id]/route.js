@@ -26,9 +26,10 @@ export const PATCH = async (request, { params }) => {
     const game = await Game.findOne({ user: userId, _id: gameId });
     const currentStatus = game[status];
 
-    const updatedGame = await Game.findByIdAndUpdate(game._id, {
+    await Game.findByIdAndUpdate(game._id, {
       [status]: !currentStatus,
     });
+    const updatedGame = await Game.findById({ _id: game._id });
 
     return new Response(JSON.stringify(updatedGame), { status: 200 });
   } catch {
@@ -49,11 +50,8 @@ export const DELETE = async (request, { params }) => {
 
     return new Response('Game deleted successfully!', { status: 200 });
   } catch {
-    return new Response(
-      'Something went wrong. Failed to delete from library.',
-      {
-        status: 500,
-      }
-    );
+    return new Response('Something went wrong. Failed to delete from library.', {
+      status: 500,
+    });
   }
 };

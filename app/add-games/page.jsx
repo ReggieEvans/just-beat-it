@@ -4,15 +4,20 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Game from '@components/Game';
 import Spinner from '@components/Spinner';
+import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa6';
 
 const AddGames = () => {
   const { data: session } = useSession();
 
   const [games, setGames] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [submitting, setIsSubmitting] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [searchTimeout, setSearchTimeout] = useState(null);
+  const [submitting, setIsSubmitting] = useState({
+    isSubmitting: false,
+    index: null,
+  });
 
   const fetchGames = async (text = '') => {
     setIsLoading(true);
@@ -44,11 +49,15 @@ const AddGames = () => {
     );
   };
 
-  const handleAddGame = async (game) => {
-    setIsSubmitting(true);
+  const handleAddGame = async (game, i) => {
+    setIsSubmitting({
+      ...submitting,
+      isSubmitting: true,
+      index: i,
+    });
 
     try {
-      const response = await fetch('/api/games/new', {
+      await fetch('/api/games/new', {
         method: 'POST',
         body: JSON.stringify({
           userId: session?.user.id,
@@ -58,19 +67,26 @@ const AddGames = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting({
+        ...submitting,
+        isSubmitting: false,
+        index: null,
+      });
     }
   };
 
   return (
     <section className="w-full">
+      <Link href={'/my-library'} className="flex items-center text-sm">
+        <FaArrowLeft className="mr-2 " /> Back to Library
+      </Link>
       <h1 className="head_text text-left mb-2">
         <span className="slate_gradient">ADD GAMES</span>
       </h1>
       <div className="relative w-full flex-center">
         <input
           type="text"
-          placeholder="Search for a tag or a username"
+          placeholder="Search for a video game"
           value={searchText}
           onChange={handleSearchChange}
           required
@@ -80,7 +96,14 @@ const AddGames = () => {
 
       <div className="flex flex-wrap justify-between py-8">
         {games.map((game, i) => (
-          <Game key={game.id} index={i} handleAddGame={handleAddGame} game={game} canAddToLibrary={true} />
+          <Game
+            key={game.id}
+            index={i}
+            handleAddGame={handleAddGame}
+            game={game}
+            submitting={submitting}
+            canSubmit={true}
+          />
         ))}
       </div>
 
