@@ -1,6 +1,3 @@
-import { connectToDB } from '@utils/database';
-import Game from '@models/game';
-import IGDB from '@utils/igdb';
 import axios from 'axios';
 
 // @desc    Get Games from IDGB
@@ -29,9 +26,15 @@ export const POST = async (request) => {
     });
 
     const rawGames = igdbRes.data;
-    const gamesWithNoRating = rawGames.filter((g) => g.total_rating === undefined);
-    const gamesWithRating = rawGames.filter((g) => g.total_rating !== undefined);
-    const sortedGames = gamesWithRating.sort((a, b) => b.total_rating - a.total_rating);
+    const gamesWithNoRating = rawGames.filter(
+      (g) => g.total_rating === undefined
+    );
+    const gamesWithRating = rawGames.filter(
+      (g) => g.total_rating !== undefined
+    );
+    const sortedGames = gamesWithRating.sort(
+      (a, b) => b.total_rating - a.total_rating
+    );
 
     const games = [...sortedGames, ...gamesWithNoRating];
 

@@ -84,6 +84,10 @@
   @apply mt-5 text-5xl font-extrabold leading-[1.15] text-black sm:text-6xl;
 }
 
+.head_text_second {
+  @apply mt-5 text-3xl font-extrabold leading-[1.15] text-black sm:text-4xl;
+}
+
 .slate_gradient {
   @apply bg-gradient-to-b from-white to-slate-500 to-95% bg-clip-text text-transparent;
 }

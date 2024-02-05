@@ -13,6 +13,12 @@ const nextConfig = {
         port: '',
         pathname: '/*/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'howlongtobeat.com',
+        port: '',
+        pathname: '/*/**',
+      },
     ],
   },
   webpack(config) {
