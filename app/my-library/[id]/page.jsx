@@ -123,6 +123,23 @@ const GameDetails = ({ params }) => {
     });
   };
 
+  const getRatingStyle = (rating) => {
+    switch (true) {
+      case rating >= 95:
+        return 'text-purple-600 border-purple-600';
+        break;
+      case rating >= 80:
+        return 'text-green-600 border-green-600';
+        break;
+      case rating >= 70:
+        return 'text-yellow-600 border-yellow-600';
+        break;
+      default:
+        return 'text-red-600 border-red-600';
+        break;
+    }
+  };
+
   return (
     <>
       {game && (
@@ -146,7 +163,11 @@ const GameDetails = ({ params }) => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center text-3xl font-bold bg-white w-[50px] h-[50px] p-8 rounded-full text-green-600 border-[6px] border-green-600 -mb-4">
+              <div
+                className={`flex items-center justify-center text-3xl font-bold bg-white w-[50px] h-[50px] p-8 rounded-full border-[6px] border-green-600 -mb-4 ${getRatingStyle(
+                  game.total_rating
+                )}`}
+              >
                 {(game.total_rating / 10).toFixed(1)}
               </div>
             </div>

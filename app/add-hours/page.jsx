@@ -31,7 +31,7 @@ const AddHours = ({
       {hourOptions.map((h) => (
         <div className="flex mb-8 bg-slate-900 p-3 rounded-md " key={h.id}>
           <div className="min-w-[76px]">
-            <Image src={h.imageUrl} width={76} height={115} />
+            <Image src={h.imageUrl} width={76} height={114} alt={'Video game cover'} />
           </div>
           <div className="flex flex-col px-4 grow">
             <div className="text-lg text-slate-200">{h.name}</div>
