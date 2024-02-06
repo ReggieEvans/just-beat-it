@@ -28,35 +28,36 @@ const AddHours = ({
 
       {isLoadingHourOptions && <Spinner size={30} message={'Loading...'} />}
 
-      {hourOptions?.map((h) => (
-        <div className="flex mb-8 bg-slate-900 p-3 rounded-md " key={h.id}>
-          <div className="min-w-[76px]">
-            <Image src={h.imageUrl} width={76} height={114} alt={'Video game cover'} />
-          </div>
-          <div className="flex flex-col px-4 grow">
-            <div className="text-lg text-slate-200">{h.name}</div>
-            <div className="flex text-xs text-slate-400 pb-2">
-              <div className="pr-2">M: {h.gameplayMain}</div>
-              <div className="pr-2">M+: {h.gameplayMainExtra}</div>
-              <div className="pr-2">CMP: {h.gameplayCompletionist}</div>
+      {hourOptions &&
+        hourOptions?.map((h) => (
+          <div className="flex mb-8 bg-slate-900 p-3 rounded-md " key={h.id}>
+            <div className="min-w-[76px]">
+              <Image src={h.imageUrl} width={76} height={114} alt={'Video game cover'} />
             </div>
-            <div className="mt-auto">
-              <button
-                className="p-1 w-full bg-purple-600 text-slate-200 text-sm rounded-sm font-bold text-center"
-                onClick={() => handleAddCompletionHours(gameId, h)}
-              >
-                {submittingHours ? (
-                  <BtnSpinner size={16} />
-                ) : (
-                  <div className="flex items-center justify-center py-1">
-                    ADD <FaPlus className="ml-1" />
-                  </div>
-                )}
-              </button>
+            <div className="flex flex-col px-4 grow">
+              <div className="text-lg text-slate-200">{h.name}</div>
+              <div className="flex text-xs text-slate-400 pb-2">
+                <div className="pr-2">M: {h.gameplayMain}</div>
+                <div className="pr-2">M+: {h.gameplayMainExtra}</div>
+                <div className="pr-2">CMP: {h.gameplayCompletionist}</div>
+              </div>
+              <div className="mt-auto">
+                <button
+                  className="p-1 w-full bg-purple-600 text-slate-200 text-sm rounded-sm font-bold text-center"
+                  onClick={() => handleAddCompletionHours(gameId, h)}
+                >
+                  {submittingHours ? (
+                    <BtnSpinner size={16} />
+                  ) : (
+                    <div className="flex items-center justify-center py-1">
+                      ADD <FaPlus className="ml-1" />
+                    </div>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
     </section>
   );
 };
