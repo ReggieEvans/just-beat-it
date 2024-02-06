@@ -13,9 +13,9 @@
 
 ## Project Screenshots
 
-[![Just Beat It Screen Shot][product-screenshot-1]]
+![Just Beat It Screen Shot][product-screenshot-1]
 
-[![Just Beat It Screen Shot][product-screenshot-2]]
+![Just Beat It Screen Shot][product-screenshot-2]
 
 ### Built With
 
