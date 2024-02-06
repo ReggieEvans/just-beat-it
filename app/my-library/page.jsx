@@ -12,16 +12,19 @@ const MyLibrary = () => {
 
   const [toggleDropdown, setToggleDropdown] = useState(false);
   const [library, setLibrary] = useState([]);
+  const [completions, setCompletions] = useState(0);
   const [sourceOfTruth, setSourceOfTruth] = useState([]);
   const [filterType, setFilterType] = useState('all');
   const [isLoading, setIsLoading] = useState(false);
-  const [submitting, setIsSubmitting] = useState(false);
 
   const fetchGames = async (text = '') => {
     setIsLoading(true);
     const response = await fetch(`/api/games/${session?.user.id}/all`);
     const data = await response.json();
 
+    const comps = data.filter((x) => x._isCompleted).length;
+
+    setCompletions(comps);
     setLibrary(data);
     setSourceOfTruth(data);
     setIsLoading(false);
@@ -32,24 +35,6 @@ const MyLibrary = () => {
       fetchGames();
     }
   }, [session]);
-
-  const handleAddGame = async (game) => {
-    setIsSubmitting(true);
-
-    try {
-      await fetch('/api/games/new', {
-        method: 'POST',
-        body: JSON.stringify({
-          userId: session?.user.id,
-          game,
-        }),
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleFilter = (type) => {
     setFilterType(type);
@@ -72,11 +57,14 @@ const MyLibrary = () => {
       const withGamePlayHours = clone.filter((x) => x._gameplayHours);
       const withoutGamePlayHours = clone.filter((x) => !x._gameplayHours);
       const sortedWithHours = withGamePlayHours.sort(
-        (a, b) => b._gameplayHours?.gameplayMain - a._gameplayHours?.gameplayMain
+        (a, b) =>
+          b._gameplayHours?.gameplayMain - a._gameplayHours?.gameplayMain
       );
       sorted = [...sortedWithHours, ...withoutGamePlayHours];
     } else if (type === 'release') {
-      sorted = clone.sort((a, b) => b.first_release_date - a.first_release_date);
+      sorted = clone.sort(
+        (a, b) => b.first_release_date - a.first_release_date
+      );
     } else {
       sorted = clone;
     }
@@ -85,24 +73,37 @@ const MyLibrary = () => {
   };
 
   return (
-    <section className="w-full">
-      <div className="w-full flex justify-between items-center">
-        <h1 className="head_text text-left mb-2">
-          <span className="slate_gradient">MY LIBRARY</span>
+    <section className='w-full'>
+      <div
+        className={`bg-gradient-to-r from-slate-900 to-slate-900 py-3 px-4 rounded-md text-white flex justify-between items-end`}
+      >
+        <div className='text-3xl font-bold slate_gradient'>
+          {' '}
+          {`${((completions / library.length) * 100).toFixed(0)}%`}{' '}
+          <span className='text-lg'>COMPLETE</span>
+        </div>
+        <div className='text-xl font-bold slate_gradient'>
+          {completions} <span className='text-sm'>OF </span>
+          {library.length}
+        </div>
+      </div>
+      <div className='w-full flex justify-between items-center'>
+        <h1 className='head_text text-left mb-2'>
+          <span className='slate_gradient'>MY LIBRARY</span>
         </h1>
-        <Link href="/add-games">
+        <Link href='/add-games'>
           <button
-            type="button"
-            className="bg-blue-600 h-[35px] mt-4 hover:brightness-110 px-2 py-1 rounded-full font-medium text-white text-xl"
+            type='button'
+            className='bg-blue-600 h-[35px] mt-4 hover:brightness-110 px-2 py-1 rounded-full font-medium text-white text-xl'
           >
             <FaPlus />
           </button>
         </Link>
       </div>
-      <div className="flex w-full text-xs items-start">
-        <div className="flex flex-wrap items-center">
+      <div className='flex w-full text-xs items-start'>
+        <div className='flex flex-wrap items-center'>
           <button
-            type="button"
+            type='button'
             className={`bg-gradient-to-r to-blue-600 hover:brightness-110 text-white px-2 py-1 rounded-full min-w-[75px] font-medium mr-4 mb-2 ${
               filterType === 'all' ? 'bg-blue-800' : 'from-blue-600'
             }`}
@@ -111,7 +112,7 @@ const MyLibrary = () => {
             ALL
           </button>
           <button
-            type="button"
+            type='button'
             className={`bg-gradient-to-r to-blue-600 hover:brightness-110 text-white px-2 py-1 rounded-full min-w-[75px] font-medium mr-4 mb-2 ${
               filterType === '_isInProgress' ? 'bg-blue-800' : 'from-blue-600'
             }`}
@@ -120,7 +121,7 @@ const MyLibrary = () => {
             IN PROGRESS
           </button>
           <button
-            type="button"
+            type='button'
             className={`bg-gradient-to-r to-blue-600 hover:brightness-110 text-white px-2 py-1 rounded-full min-w-[75px] font-medium mr-4 mb-2 ${
               filterType === '_isCompleted' ? 'bg-blue-800' : 'from-blue-600'
             }`}
@@ -129,7 +130,7 @@ const MyLibrary = () => {
             COMPLETED
           </button>
           <button
-            type="button"
+            type='button'
             className={`bg-gradient-to-r to-blue-600 hover:brightness-110 text-white px-2 py-1 rounded-full min-w-[75px] font-medium mr-4 mb-2 ${
               filterType === '_isQuit' ? 'bg-blue-800' : 'from-blue-600'
             }`}
@@ -138,7 +139,7 @@ const MyLibrary = () => {
             QUIT
           </button>
           <button
-            type="button"
+            type='button'
             className={`bg-gradient-to-r to-blue-600 hover:brightness-110 text-white px-2 py-1 rounded-full min-w-[75px] font-medium mr-4 mb-2 ${
               filterType === '_isPileOfShame' ? 'bg-blue-800' : 'from-blue-600'
             }`}
@@ -147,27 +148,42 @@ const MyLibrary = () => {
             PILE OF SHAME
           </button>
         </div>
-        <div className="relative ml-auto">
+        <div className='relative ml-auto'>
           <button
-            type="button"
-            className="bg-transparent hover:brightness-110 px-2 py-1 rounded-full font-medium text-slate-400 text-lg"
+            type='button'
+            className='bg-transparent hover:brightness-110 px-2 py-1 rounded-full font-medium text-slate-400 text-lg'
             onClick={() => setToggleDropdown(!toggleDropdown)}
           >
             <FaSortAmountDownAlt />
           </button>
           {toggleDropdown && (
-            <div className="dropdown z-50">
-              <div className="flex justify-start w-full px-4 text-md"> Sort By:</div>
-              <div className="dropdown_link flex items-center" onClick={() => handleSort('alphabetical')}>
+            <div className='dropdown z-50'>
+              <div className='flex justify-start w-full px-4 text-md'>
+                {' '}
+                Sort By:
+              </div>
+              <div
+                className='dropdown_link flex items-center'
+                onClick={() => handleSort('alphabetical')}
+              >
                 A-Z
               </div>
-              <div className="dropdown_link flex items-center" onClick={() => handleSort('rating')}>
+              <div
+                className='dropdown_link flex items-center'
+                onClick={() => handleSort('rating')}
+              >
                 Rating
               </div>
-              <div className="dropdown_link flex items-center" onClick={() => handleSort('hours')}>
+              <div
+                className='dropdown_link flex items-center'
+                onClick={() => handleSort('hours')}
+              >
                 Completion Hours
               </div>
-              <div className="dropdown_link flex items-center" onClick={() => handleSort('release')}>
+              <div
+                className='dropdown_link flex items-center'
+                onClick={() => handleSort('release')}
+              >
                 Release Date
               </div>
             </div>
@@ -175,10 +191,10 @@ const MyLibrary = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap w-full justify-start py-8">
+      <div className='flex flex-wrap w-full justify-start py-8'>
         {library.map((game, i) => (
           <Link href={`/my-library/${game._id}`} key={game._id}>
-            <Game index={i} handleAddGame={handleAddGame} game={game} canSubmit={false} />
+            <Game index={i} game={game} canSubmit={false} />
           </Link>
         ))}
       </div>

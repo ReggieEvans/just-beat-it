@@ -13,11 +13,14 @@ const MainLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full">
+    <div className='flex flex-col h-screen w-full'>
       <Nav handleShowSideNav={handleShowSideNav} />
       {children}
       <Footer />
-      <SideNav showSideNav={showSideNav} handleShowSideNav={handleShowSideNav} />
+      <SideNav
+        showSideNav={showSideNav}
+        handleShowSideNav={handleShowSideNav}
+      />
     </div>
   );
 };
