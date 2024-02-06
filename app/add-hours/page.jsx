@@ -28,7 +28,7 @@ const AddHours = ({
 
       {isLoadingHourOptions && <Spinner size={30} message={'Loading...'} />}
 
-      {hourOptions.map((h) => (
+      {hourOptions?.map((h) => (
         <div className="flex mb-8 bg-slate-900 p-3 rounded-md " key={h.id}>
           <div className="min-w-[76px]">
             <Image src={h.imageUrl} width={76} height={114} alt={'Video game cover'} />
