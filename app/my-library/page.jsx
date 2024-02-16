@@ -8,23 +8,31 @@ import Link from 'next/link';
 import Spinner from '@components/Spinner';
 
 const MyLibrary = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const { data: session } = useSession();
 
   const [toggleDropdown, setToggleDropdown] = useState(false);
   const [library, setLibrary] = useState([]);
   const [completions, setCompletions] = useState(0);
+  const [hours, setHours] = useState(null);
   const [sourceOfTruth, setSourceOfTruth] = useState([]);
   const [filterType, setFilterType] = useState('all');
-  const [isLoading, setIsLoading] = useState(false);
 
   const fetchGames = async (text = '') => {
-    setIsLoading(true);
     const response = await fetch(`/api/games/${session?.user.id}/all`);
     const data = await response.json();
 
-    const comps = data.filter((x) => x._isCompleted).length;
+    const comps = data.filter((x) => x._isCompleted);
+    const totalHours = data.reduce((acc, item) => {
+      return (acc += item._gameplayHours.gameplayMain);
+    }, 0);
+    const hoursCompleted = comps.reduce((acc, item) => {
+      return (acc += item._gameplayHours.gameplayMain);
+    }, 0);
+    const hoursRemaining = totalHours - hoursCompleted;
 
-    setCompletions(comps);
+    setCompletions(comps.length);
+    setHours({ totalHours, hoursCompleted, hoursRemaining });
     setLibrary(data);
     setSourceOfTruth(data);
     setIsLoading(false);
@@ -32,6 +40,7 @@ const MyLibrary = () => {
 
   useEffect(() => {
     if (session) {
+      setIsLoading(true);
       fetchGames();
     }
   }, [session]);
@@ -71,17 +80,34 @@ const MyLibrary = () => {
 
   return (
     <section className="w-full">
-      <div
-        className={`bg-gradient-to-r from-slate-900 to-slate-900 py-3 px-4 rounded-md text-white flex justify-between items-end`}
-      >
-        <div className="text-3xl font-bold slate_gradient">
-          {' '}
-          {`${((completions / sourceOfTruth.length) * 100).toFixed(0)}%`} <span className="text-lg">COMPLETE</span>
-        </div>
-        <div className="text-xl font-bold slate_gradient">
-          {completions} <span className="text-sm">OF </span>
-          {sourceOfTruth.length}
-        </div>
+      <div className={`bg-gradient-to-r from-slate-900 to-slate-900 py-3 px-4 rounded-md text-white flex flex-col`}>
+        {!isLoading ? (
+          <>
+            <div className="flex  justify-between  items-center">
+              <div className="text-3xl font-bold slate_gradient">
+                {' '}
+                {`${((completions / sourceOfTruth.length) * 100).toFixed(0)}%`}{' '}
+                <span className="text-lg">COMPLETE</span>
+              </div>
+              <div className="font-bold slate_gradient">
+                {completions} <span className="text-sm">OF </span>
+                {sourceOfTruth.length}
+              </div>
+            </div>
+            <div className="flex justify-between pt-4 items-center">
+              <div className="text-3xl font-bold slate_gradient">
+                {hours?.hoursCompleted}
+                <span className="text-lg"> HRS PLAYED</span>
+              </div>
+              <div className="font-bold slate_gradient">
+                {hours?.hoursCompleted} <span className="text-sm">OF </span>
+                {hours?.hoursRemaining}
+              </div>
+            </div>
+          </>
+        ) : (
+          <p>Loading stats...</p>
+        )}
       </div>
       <div className="w-full flex justify-between items-center">
         <h1 className="head_text text-left mb-2">
